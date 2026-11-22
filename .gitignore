@@ -1,0 +1,13 @@
+*.mp4
+*.wav
+__pycache__/
+node_modules/
+ref_inspect/
+out/
+.env
+.DS_Store
+Thumbs.db
+test_buffer.py
+post_to_buffer.py
+uploader.py
+catbox_uploader.py

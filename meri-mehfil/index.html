@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<title>Meri Mehfil — Mughal Miniature Diptych (Anidoodle Craft)</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 720px;
+    height: 1280px;
+    overflow: hidden;
+    background: #060B12;
+    font-family: 'Noto Serif Devanagari', serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  #stage {
+    position: absolute;
+    left: 0; top: 0;
+    width: 720px; height: 1280px;
+  }
+  #paper-canvas, #fx-canvas {
+    position: absolute;
+    left: 0; top: 0;
+    width: 720px; height: 1280px;
+    pointer-events: none;
+  }
+  #paper-canvas {
+    mix-blend-mode: multiply;
+    opacity: 0.22;
+  }
+  #fx-canvas {
+    mix-blend-mode: screen;
+  }
+</style>
+</head>
+<body>
+
+<svg id="stage" viewBox="0 0 720 1280" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Mughal Cusped Foil Arch for Left Chamber (x=35, y=75, w=285, h=525) -->
+    <clipPath id="arch-left">
+      <path d="M 35,600 L 35,240 
+               C 35,195 48,185 72,175 
+               C 85,150 105,140 135,135 
+               C 155,110 177,85 177,75 
+               C 177,85 199,110 219,135 
+               C 249,140 269,150 282,175 
+               C 306,185 320,195 320,240 
+               L 320,600 Z"/>
+    </clipPath>
+
+    <!-- Mughal Cusped Foil Arch for Right Chamber (x=400, y=75, w=285, h=525) -->
+    <clipPath id="arch-right">
+      <path d="M 400,600 L 400,240 
+               C 400,195 413,185 437,175 
+               C 450,150 470,140 500,135 
+               C 520,110 542,85 542,75 
+               C 542,85 564,110 584,135 
+               C 614,140 634,150 647,175 
+               C 671,185 685,195 685,240 
+               L 685,600 Z"/>
+    </clipPath>
+
+    <!-- Warm Flame Radial Glow -->
+    <radialGradient id="grad-flame-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF9D2" stop-opacity="1"/>
+      <stop offset="25%" stop-color="#FFBA3B" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#E65100" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#E65100" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Cold Moon Glow -->
+    <radialGradient id="grad-moon-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="35%" stop-color="#D0E2EE" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#D0E2EE" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Antique Gold Leaf Shading -->
+    <linearGradient id="grad-gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7A5D18"/>
+      <stop offset="20%" stop-color="#C29D38"/>
+      <stop offset="50%" stop-color="#FFF2B2"/>
+      <stop offset="80%" stop-color="#C29D38"/>
+      <stop offset="100%" stop-color="#5E450E"/>
+    </linearGradient>
+
+    <!-- Silk Curtains -->
+    <linearGradient id="grad-curtain" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#FFF3C4" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#917215" stop-opacity="0.95"/>
+    </linearGradient>
+
+    <!-- Royal Quilt Velvet -->
+    <linearGradient id="grad-quilt" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7A0C1E"/>
+      <stop offset="50%" stop-color="#540814"/>
+      <stop offset="100%" stop-color="#2B0309"/>
+    </linearGradient>
+  
+    <!-- Sleeve & Attire Gradients for Lovers in Prologue -->
+    <linearGradient id="grad-jade-sleeve" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#082417"/>
+      <stop offset="50%" stop-color="#11422C"/>
+      <stop offset="100%" stop-color="#061A10"/>
+    </linearGradient>
+
+    <linearGradient id="grad-burgundy-sleeve" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#470613"/>
+      <stop offset="50%" stop-color="#7A1024"/>
+      <stop offset="100%" stop-color="#38030D"/>
+    </linearGradient>
+
+    <!-- Divine Union Aura (Warm Golden Sunburst between hands) -->
+    <radialGradient id="grad-union-aura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF6D4" stop-opacity="1"/>
+      <stop offset="30%" stop-color="#FFA726" stop-opacity="0.75"/>
+      <stop offset="65%" stop-color="#E65100" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#180206" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Jewels -->
+    <radialGradient id="grad-emerald" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="50%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#064E3B"/>
+    </radialGradient>
+
+    <radialGradient id="grad-ruby" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FB7185"/>
+      <stop offset="50%" stop-color="#E11D48"/>
+      <stop offset="100%" stop-color="#881337"/>
+    </radialGradient>
+
+    <radialGradient id="grad-pearl" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="70%" stop-color="#F1F5F9"/>
+      <stop offset="100%" stop-color="#94A3B8"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ================= SCENE: PROLOGUE (0.0s - 3.2s) ================= -->
+  <g id="scene-prologue">
+    <rect width="720" height="1280" fill="#140206"/>
+    <!-- Deep Royal Crimson Vignette Background -->
+    <circle cx="360" cy="640" r="520" fill="#22040B"/>
+    <circle cx="360" cy="640" r="380" fill="#360612"/>
+    <circle cx="360" cy="640" r="240" fill="#4A091A"/>
+
+    <!-- Central Warm Illuminating Aura behind meeting hands -->
+    <g id="p-union-glow" transform="translate(360, 640)">
+      <circle cx="0" cy="0" r="280" fill="url(#grad-union-aura)" opacity="0.95"/>
+      <circle cx="0" cy="0" r="140" fill="#FFE8A3" opacity="0.18"/>
+    </g>
+
+    <!-- Floating subtle golden embers/motes in the warm light -->
+    <g id="p-motes">
+      <circle cx="340" cy="610" r="2.5" fill="#FFEAA7" opacity="0.7"/>
+      <circle cx="380" cy="660" r="1.8" fill="#FFD166" opacity="0.6"/>
+      <circle cx="320" cy="690" r="2.0" fill="#FFEAA7" opacity="0.5"/>
+      <circle cx="410" cy="620" r="1.5" fill="#FFD166" opacity="0.7"/>
+      <circle cx="360" cy="570" r="2.2" fill="#FFEAA7" opacity="0.8"/>
+      <circle cx="290" cy="640" r="1.6" fill="#FFD166" opacity="0.5"/>
+    </g>
+
+    <!-- MAN'S HAND & ARM (Left lover reaching from bottom-left) -->
+    <!-- Modeled with true anatomical proportions: knuckle arc, 14 phalanges, opposed thumb, emerald signet ring -->
+    <g id="p-hand-man" transform="translate(0, 0)">
+      <!-- Royal Mughal Angrakha Sleeve (Forest Jade & Gold) -->
+      <path d="M -50,1300 L 120,880 L 220,935 L 70,1320 Z" fill="url(#grad-jade-sleeve)"/>
+      <!-- Gold Zari Embroidery on Sleeve -->
+      <path d="M 80,900 L 180,955" stroke="#C29D38" stroke-width="6"/>
+      <path d="M 85,892 L 185,947" stroke="#FFF2B2" stroke-width="2"/>
+      <path d="M 95,920 L 195,975" stroke="#C29D38" stroke-width="3" stroke-dasharray="4,6"/>
+      <!-- Pearl cuff border -->
+      <g transform="translate(105, 875) rotate(32)">
+        <circle cx="0" cy="0" r="4.5" fill="url(#grad-pearl)"/>
+        <circle cx="12" cy="0" r="4.5" fill="url(#grad-pearl)"/>
+        <circle cx="24" cy="0" r="4.5" fill="url(#grad-pearl)"/>
+        <circle cx="36" cy="0" r="4.5" fill="url(#grad-pearl)"/>
+        <circle cx="48" cy="0" r="4.5" fill="url(#grad-pearl)"/>
+        <circle cx="60" cy="0" r="4.5" fill="url(#grad-pearl)"/>
+        <circle cx="72" cy="0" r="4.5" fill="url(#grad-pearl)"/>
+        <circle cx="84" cy="0" r="4.5" fill="url(#grad-pearl)"/>
+        <circle cx="96" cy="0" r="4.5" fill="url(#grad-pearl)"/>
+      </g>
+
+      <!-- Forearm & Carpal Heel (Warm Olive Skin) -->
+      <path d="M 120,880 C 145,830 180,780 220,740 L 290,785 C 260,835 220,890 190,935 Z" fill="#B87B5E"/>
+      <path d="M 130,870 C 152,825 185,780 222,745 L 285,785 C 255,830 215,880 188,925 Z" fill="#C68E6F"/>
+      <!-- Wrist Tendon & Shading -->
+      <path d="M 195,810 Q 230,815 250,770" stroke="#9E654C" stroke-width="2.5" fill="none" opacity="0.6"/>
+
+      <!-- Palm & Dorsal Metacarpals following Knuckle Arc -->
+      <path d="M 220,740 C 235,710 260,685 295,665 C 325,650 350,655 365,675 C 350,715 325,755 290,785 Z" fill="#C68E6F"/>
+      
+      <!-- Knuckle Arc Shading (Index, Middle, Ring, Little) -->
+      <circle cx="275" cy="700" r="7" fill="#B37355" opacity="0.5"/>
+      <circle cx="305" cy="675" r="7.5" fill="#B37355" opacity="0.5"/>
+      <circle cx="335" cy="665" r="7.5" fill="#B37355" opacity="0.5"/>
+      <circle cx="360" cy="672" r="6.5" fill="#B37355" opacity="0.5"/>
+
+      <!-- Man's Thumb (Opposed from wrist, resting forward) -->
+      <path d="M 215,745 C 230,755 255,765 275,760 C 295,755 315,745 330,735 C 322,725 305,732 285,738 C 265,742 240,735 228,730 Z" fill="#C68E6F"/>
+      <!-- Thumb nail -->
+      <ellipse cx="325" cy="735" rx="5" ry="3.5" fill="#E8D5CE" transform="rotate(-15 325 735)"/>
+
+      <!-- Man's Little Finger (Curled naturally in cascade) -->
+      <path d="M 358,680 C 375,690 395,705 405,720 C 410,727 405,732 398,730 C 388,720 372,705 352,692 Z" fill="#A8684D"/>
+
+      <!-- Man's Ring Finger (Supporting cascade) -->
+      <path d="M 335,665 C 358,670 385,680 405,695 C 412,700 408,707 400,705 C 380,690 355,680 330,675 Z" fill="#B8775B"/>
+
+      <!-- Man's Middle Finger (Longest, reaching to touch her hand) -->
+      <path d="M 305,675 C 325,650 350,635 375,630 C 385,628 388,634 380,640 C 355,652 330,670 300,688 Z" fill="#C68E6F"/>
+      <!-- Middle finger nail -->
+      <ellipse cx="377" cy="632" rx="4.5" ry="3" fill="#E8D5CE" transform="rotate(-18 377 632)"/>
+
+      <!-- Man's Index Finger (Curving forward tenderly, wearing Emerald Ring) -->
+      <path d="M 275,700 C 295,680 320,660 348,642 C 358,636 362,642 355,648 C 328,670 300,695 270,715 Z" fill="#D4997A"/>
+      <!-- Index finger nail -->
+      <ellipse cx="354" cy="642" rx="4.5" ry="3" fill="#E8D5CE" transform="rotate(-28 354 642)"/>
+
+      <!-- Royal Emerald Signet Ring on Index Finger -->
+      <g transform="translate(315, 665) rotate(-35)">
+        <rect x="-3" y="-8" width="6" height="16" rx="2" fill="url(#grad-gold)"/>
+        <rect x="-5" y="-5" width="10" height="10" rx="2" fill="url(#grad-gold)"/>
+        <circle cx="0" cy="0" r="4.2" fill="url(#grad-emerald)"/>
+        <circle cx="-1" cy="-1" r="1.5" fill="#A7F3D0" opacity="0.8"/>
+      </g>
+    </g>
+
+    <!-- WOMAN'S HAND & ARM (Right beloved reaching from bottom-right) -->
+    <!-- Modeled with delicate feminine anatomy, henna mandala, red/gold bangles, ruby ring -->
+    <g id="p-hand-woman" transform="translate(0, 0)">
+      <!-- Royal Mughal Silk Sleeve (Crimson / Burgundy Velvet) -->
+      <path d="M 770,1300 L 600,880 L 500,935 L 650,1320 Z" fill="url(#grad-burgundy-sleeve)"/>
+      <!-- Gold Zari Cuff Embroidery -->
+      <path d="M 620,900 L 520,955" stroke="#C29D38" stroke-width="6"/>
+      <path d="M 615,892 L 515,947" stroke="#FFF2B2" stroke-width="2"/>
+      <path d="M 605,920 L 505,975" stroke="#C29D38" stroke-width="3" stroke-dasharray="4,6"/>
+
+      <!-- Stacked Royal Bangles (Choodiyan: Gold Kadas + Red Lac Glass Bangles) -->
+      <g transform="translate(560, 860) rotate(-32)">
+        <rect x="-55" y="0" width="10" height="70" rx="3" fill="url(#grad-gold)"/>
+        <rect x="-42" y="3" width="4" height="64" rx="2" fill="#B31226"/>
+        <rect x="-36" y="3" width="4" height="64" rx="2" fill="#B31226"/>
+        <rect x="-30" y="3" width="4" height="64" rx="2" fill="#B31226"/>
+        <rect x="-24" y="3" width="4" height="64" rx="2" fill="#B31226"/>
+        <rect x="-17" y="1" width="9" height="68" rx="3" fill="url(#grad-gold)"/>
+        <circle cx="-50" cy="10" r="2.5" fill="url(#grad-pearl)"/>
+        <circle cx="-50" cy="25" r="2.5" fill="url(#grad-pearl)"/>
+        <circle cx="-50" cy="40" r="2.5" fill="url(#grad-pearl)"/>
+        <circle cx="-50" cy="55" r="2.5" fill="url(#grad-pearl)"/>
+      </g>
+
+      <!-- Slender Feminine Forearm & Carpal Heel -->
+      <path d="M 600,880 C 575,830 540,780 500,740 L 430,785 C 460,835 500,890 530,935 Z" fill="#BA735A"/>
+      <path d="M 590,870 C 568,825 535,780 498,745 L 435,785 C 465,830 505,880 532,925 Z" fill="#DE9C80"/>
+
+      <!-- Palm & Dorsal Metacarpals following Feminine Knuckle Arc -->
+      <path d="M 500,740 C 485,710 460,685 425,665 C 395,650 370,655 355,675 C 370,715 395,755 430,785 Z" fill="#DE9C80"/>
+
+      <!-- INTRICATE HENNA / MEHNDI ART (Dorsal Mandala & Finger Jaal) -->
+      <!-- Central Circular Floral Mandala -->
+      <g transform="translate(435, 715)">
+        <circle cx="0" cy="0" r="22" fill="none" stroke="#521508" stroke-width="2.5"/>
+        <circle cx="0" cy="0" r="15" fill="#521508" opacity="0.85"/>
+        <circle cx="0" cy="0" r="9" fill="#DE9C80"/>
+        <circle cx="0" cy="0" r="4" fill="#521508"/>
+        <path d="M 0,-24 L 3,-18 L -3,-18 Z M 0,24 L 3,18 L -3,18 Z M -24,0 L -18,3 L -18,-3 Z M 24,0 L 18,3 L 18,-3 Z M -17,-17 L -12,-16 L -16,-12 Z M 17,17 L 12,16 L 16,12 Z M -17,17 L -12,16 L -16,12 Z M 17,-17 L 12,-16 L 16,-12 Z" fill="#521508"/>
+        <circle cx="0" cy="-28" r="1.5" fill="#521508"/>
+        <circle cx="20" cy="-20" r="1.5" fill="#521508"/>
+        <circle cx="28" cy="0" r="1.5" fill="#521508"/>
+        <circle cx="20" cy="20" r="1.5" fill="#521508"/>
+        <circle cx="0" cy="28" r="1.5" fill="#521508"/>
+        <circle cx="-20" cy="20" r="1.5" fill="#521508"/>
+        <circle cx="-28" cy="0" r="1.5" fill="#521508"/>
+        <circle cx="-20" cy="-20" r="1.5" fill="#521508"/>
+      </g>
+
+      <!-- Woman's Thumb (Reaching tenderly towards his thumb) -->
+      <path d="M 505,745 C 490,755 465,765 445,760 C 425,755 405,745 390,735 C 398,725 415,732 435,738 C 455,742 480,735 492,730 Z" fill="#DE9C80"/>
+      <path d="M 390,735 C 395,730 405,732 410,740 C 400,744 394,740 390,735 Z" fill="#521508"/>
+      <ellipse cx="395" cy="735" rx="4" ry="2.8" fill="#F3E5E0" transform="rotate(15 395 735)"/>
+
+      <!-- Woman's Little Finger (Gracefully arched outward) -->
+      <path d="M 362,680 C 345,690 325,705 315,720 C 310,727 315,732 322,730 C 332,720 348,705 368,692 Z" fill="#B36E53"/>
+      <circle cx="317" cy="722" r="4" fill="#521508"/>
+
+      <!-- Woman's Ring Finger (Touching softly, adorned with Ruby Ring) -->
+      <path d="M 385,665 C 362,670 335,680 315,695 C 308,700 312,707 320,705 C 340,690 365,680 390,675 Z" fill="#CD8469"/>
+      <circle cx="314" cy="699" r="4.2" fill="#521508"/>
+
+      <!-- Haathphool Gold Chain from Wrist to Ring -->
+      <path d="M 500,780 Q 430,730 355,680" stroke="#D4AF37" stroke-width="1.8" fill="none" stroke-dasharray="3,3"/>
+
+      <!-- Ruby Ring on Ring Finger -->
+      <g transform="translate(355, 680) rotate(35)">
+        <rect x="-2.5" y="-7" width="5" height="14" rx="1.5" fill="url(#grad-gold)"/>
+        <path d="M 0,-7 C 5,-2 5,4 0,7 C -5,4 -5,-2 0,-7 Z" fill="url(#grad-ruby)"/>
+        <circle cx="0" cy="1" r="1.5" fill="#FECDD3" opacity="0.8"/>
+      </g>
+
+      <!-- Woman's Middle Finger (Longest, intertwining with his middle finger) -->
+      <path d="M 415,675 C 395,650 370,635 345,630 C 335,628 332,634 340,640 C 365,652 390,670 420,688 Z" fill="#DE9C80"/>
+      <path d="M 345,630 C 338,632 334,636 340,642 C 348,640 352,634 345,630 Z" fill="#521508"/>
+      <ellipse cx="343" cy="632" rx="4" ry="2.8" fill="#F3E5E0" transform="rotate(18 343 632)"/>
+
+      <!-- Woman's Index Finger (Touching his index/thumb) -->
+      <path d="M 445,700 C 425,680 400,660 372,642 C 362,636 358,642 365,648 C 392,670 420,695 450,715 Z" fill="#E8A98E"/>
+      <path d="M 372,642 C 365,644 362,648 368,652 C 375,650 378,645 372,642 Z" fill="#521508"/>
+      <ellipse cx="366" cy="642" rx="4" ry="2.8" fill="#F3E5E0" transform="rotate(28 366 642)"/>
+    </g>
+
+    <!-- Cold Shadow / Night Vignette Overlay (activates on parting) -->
+    <rect id="p-cold-shadow" width="720" height="1280" fill="#040914" opacity="0" pointer-events="none"/>
+
+    <!-- Prologue Calligraphy Title Card -->
+    <g id="p-title-card" transform="translate(360, 1050)">
+      <text y="0" fill="#E8C96D" font-size="44" font-weight="700" text-anchor="middle" letter-spacing="4px">
+        मेरी महफ़िल
+      </text>
+      <text y="48" fill="#B39860" font-size="22" font-weight="400" text-anchor="middle" letter-spacing="5px">
+        MERI MEHFIL // A SILENT GHAZAL
+      </text>
+      <line x1="-140" y1="70" x2="140" y2="70" stroke="#D4AF37" stroke-width="1.5"/>
+    </g>
+  </g>
+
+  <!-- ================= SCENE: DIPTYCH (3.2s - 16.84s) ================= -->
+  <g id="scene-diptych" opacity="0">
+    <!-- ================= LEFT HALF: HIS DARKENED CHAMBER ================= -->
+    <g id="half-left">
+      <!-- Dark Emerald Background with Damask Motif -->
+      <rect x="0" y="0" width="335" height="1280" fill="#0A1814"/>
+      <path d="M 20,0 L 20,1280 M 315,0 L 315,1280" stroke="#0E241E" stroke-width="2"/>
+      <path d="M 20,170 Q 167,100 315,170 M 20,550 Q 167,480 315,550" stroke="#0E241E" stroke-width="2" fill="none"/>
+
+      <!-- Jharokha Window Cutout -->
+      <g clip-path="url(#arch-left)">
+        <!-- Deep Nocturnal Sky -->
+        <rect x="35" y="75" width="285" height="525" fill="#050A14"/>
+        <!-- Star Field -->
+        <circle cx="75" cy="150" r="1.5" fill="#FFFFFF" opacity="0.85"/>
+        <circle cx="115" cy="210" r="1.2" fill="#FFFFFF" opacity="0.6"/>
+        <circle cx="235" cy="160" r="1.5" fill="#FFFFFF" opacity="0.75"/>
+        <circle cx="275" cy="240" r="1.2" fill="#FFFFFF" opacity="0.9"/>
+        <circle cx="90" cy="330" r="1.4" fill="#FFFFFF" opacity="0.55"/>
+        <circle cx="255" cy="370" r="1.3" fill="#FFFFFF" opacity="0.8"/>
+        <!-- Cold Moon Glow & Crescent -->
+        <circle cx="205" cy="200" r="34" fill="url(#grad-moon-glow)"/>
+        <circle cx="205" cy="200" r="25" fill="#E4EEF5"/>
+        <circle cx="213" cy="196" r="23" fill="#050A14"/>
+        <!-- Window Wooden Mullions -->
+        <line x1="88" y1="75" x2="88" y2="600" stroke="#0A1220" stroke-width="4"/>
+        <line x1="142" y1="75" x2="142" y2="600" stroke="#0A1220" stroke-width="4"/>
+        <line x1="196" y1="75" x2="196" y2="600" stroke="#0A1220" stroke-width="4"/>
+        <line x1="250" y1="75" x2="250" y2="600" stroke="#0A1220" stroke-width="4"/>
+      </g>
+
+      <!-- Scalloped Outer Gold Foil Frame -->
+      <path d="M 35,600 L 35,240 
+               C 35,195 48,185 72,175 
+               C 85,150 105,140 135,135 
+               C 155,110 177,85 177,75 
+               C 177,85 199,110 219,135 
+               C 249,140 269,150 282,175 
+               C 306,185 320,195 320,240 
+               L 320,600" stroke="url(#grad-gold)" stroke-width="8" fill="none"/>
+      <path d="M 28,600 L 28,240 C 28,165 80,125 177,65 C 274,125 327,165 327,240 L 327,600" stroke="#5E470E" stroke-width="3" fill="none"/>
+
+      <!-- Lower Wood Paneling in His Chamber -->
+      <rect x="0" y="600" width="335" height="680" fill="#05100C"/>
+      <rect x="0" y="600" width="335" height="30" fill="#0D241B"/>
+      <line x1="0" y1="630" x2="335" y2="630" stroke="#D4AF37" stroke-width="2"/>
+
+      <!-- 4 Mughal Carved Niches on Lower Paneling -->
+      <g id="left-niches" transform="translate(15, 660)">
+        <path d="M 10,160 L 10,40 C 10,10 30,0 40,-10 C 50,0 70,10 70,40 L 70,160 Z" stroke="#3D3012" stroke-width="2" fill="#020805"/>
+        <path d="M 85,160 L 85,40 C 85,10 105,0 115,-10 C 125,0 145,10 145,40 L 145,160 Z" stroke="#3D3012" stroke-width="2" fill="#020805"/>
+        <path d="M 160,160 L 160,40 C 160,10 180,0 190,-10 C 200,0 220,10 220,40 L 220,160 Z" stroke="#3D3012" stroke-width="2" fill="#020805"/>
+        <path d="M 235,160 L 235,40 C 235,10 255,0 265,-10 C 275,0 295,10 295,40 L 295,160 Z" stroke="#3D3012" stroke-width="2" fill="#020805"/>
+      </g>
+
+      <!-- Antique Gold Pocket Watch with Live Ticking Hands -->
+      <g id="pocket-watch" transform="translate(195, 545)">
+        <circle cx="0" cy="0" r="42" fill="url(#grad-gold)" stroke="#523A05" stroke-width="2"/>
+        <circle cx="0" cy="0" r="34" fill="#FBF9F2"/>
+        <path d="M -10,-42 L 10,-42 L 6,-54 L -6,-54 Z" fill="url(#grad-gold)"/>
+        <circle cx="0" cy="-56" r="8" fill="none" stroke="url(#grad-gold)" stroke-width="3"/>
+        <circle cx="0" cy="0" r="30" fill="none" stroke="#695116" stroke-width="1" stroke-dasharray="2,6"/>
+        <line id="watch-hour" x1="0" y1="0" x2="0" y2="-18" stroke="#111111" stroke-width="3" stroke-linecap="round"/>
+        <line id="watch-min" x1="0" y1="0" x2="0" y2="-26" stroke="#C62828" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="0" cy="0" r="3" fill="#111111"/>
+      </g>
+
+      <!-- Extinguished Brass Diyas with Detailed Curling Smoke Wisps -->
+      <g transform="translate(45, 605)">
+        <path d="M -25,18 Q 0,35 25,18 Q 18,5 0,7 Q -18,5 -25,18 Z" fill="#695116"/>
+        <ellipse cx="0" cy="8" rx="18" ry="4" fill="#2E2208"/>
+        <!-- Smoke Wisps -->
+        <path id="smoke-left-1" d="M 0,8 Q -12,-35 18,-75 T 6,-150 T 22,-210" stroke="rgba(200, 215, 225, 0.5)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      </g>
+      <g transform="translate(115, 605)">
+        <path d="M -22,16 Q 0,32 22,16 Q 16,5 0,6 Q -16,5 -22,16 Z" fill="#544111"/>
+        <ellipse cx="0" cy="7" rx="15" ry="3" fill="#1F1604"/>
+        <path id="smoke-left-2" d="M 0,7 Q 14,-38 -10,-80 T 12,-140" stroke="rgba(200, 215, 225, 0.4)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- Scattered Velvet Rose Petals -->
+      <ellipse cx="78" cy="618" rx="8" ry="4.5" fill="#800D1D" transform="rotate(-15 78 618)"/>
+      <ellipse cx="94" cy="622" rx="6.5" ry="3.5" fill="#5E0814" transform="rotate(25 94 622)"/>
+      <ellipse cx="152" cy="616" rx="7.5" ry="4" fill="#800D1D" transform="rotate(-40 152 616)"/>
+
+      <!-- Cold Untouched Glass of Tea -->
+      <g transform="translate(255, 575)">
+        <path d="M 0,0 L 26,0 L 20,42 L 6,42 Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+        <path d="M 4,12 L 22,12 L 18,40 L 8,40 Z" fill="#420B16" opacity="0.8"/>
+      </g>
+
+      <!-- Anatomical Man's Hand Resting on Sill (Emerald Signet Ring) -->
+      <g transform="translate(270, 580)">
+        <!-- Embroidered Emerald Silk Sleeve -->
+        <path d="M 30,-12 L 65,-12 L 65,42 L 18,42 Z" fill="#0C3B2E"/>
+        <rect x="18" y="0" width="8" height="42" fill="url(#grad-gold)"/>
+        <!-- Natural Knuckle & Finger Cascade -->
+        <path d="M 18,6 C 8,6 -2,10 -18,15 C -34,20 -48,24 -58,26 C -58,34 -42,36 -26,36 C -10,36 8,34 18,34 Z" fill="#C28C72"/>
+        <!-- Signet Ring -->
+        <rect x="-38" y="18" width="6" height="11" rx="1.5" fill="url(#grad-gold)"/>
+        <circle cx="-35" cy="23.5" r="3" fill="#00E676"/>
+      </g>
+
+      <!-- Deep Moonlight Dimmer -->
+      <rect id="left-dimmer" x="0" y="0" width="335" height="1280" fill="#04090E" opacity="0.35"/>
+
+      <!-- Subtitle Card: His Chamber -->
+      <g id="sub-card-left" transform="translate(25, 870)">
+        <rect x="0" y="0" width="285" height="160" rx="10" fill="rgba(5, 16, 12, 0.92)" stroke="#C29B38" stroke-width="2"/>
+        <text x="142" y="55" fill="#FFFFFF" font-size="25" font-weight="700" text-anchor="middle">
+          मेरी महफ़िल में
+        </text>
+        <text x="142" y="95" fill="#FF5252" font-size="26" font-weight="700" text-anchor="middle">
+          करके अँधेरे...
+        </text>
+        <text x="142" y="132" fill="#8EA89D" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="600" text-anchor="middle">
+          [HIS MEHFIL // EXTINCTION]
+        </text>
+      </g>
+    </g>
+
+    <!-- ================= RIGHT HALF: HER RADIANT MEHFIL ================= -->
+    <g id="half-right">
+      <!-- Royal Crimson Wallpaper Background -->
+      <rect x="385" y="0" width="335" height="1280" fill="#3D0814"/>
+      <path d="M 405,0 L 405,1280 M 700,0 L 700,1280" stroke="#4D0C1A" stroke-width="2"/>
+      <path d="M 405,170 Q 552,100 700,170 M 405,550 Q 552,480 700,550" stroke="#4D0C1A" stroke-width="2" fill="none"/>
+
+      <!-- Jharokha Window Cutout -->
+      <g clip-path="url(#arch-right)">
+        <!-- Warm Sky with Full Moon -->
+        <rect x="400" y="75" width="285" height="525" fill="#180B15"/>
+        <circle cx="535" cy="195" r="50" fill="url(#grad-flame-glow)"/>
+        <circle cx="535" cy="195" r="28" fill="#FFF2C6"/>
+        <line x1="455" y1="75" x2="455" y2="600" stroke="#2B1020" stroke-width="4"/>
+        <line x1="510" y1="75" x2="510" y2="600" stroke="#2B1020" stroke-width="4"/>
+        <line x1="565" y1="75" x2="565" y2="600" stroke="#2B1020" stroke-width="4"/>
+        <line x1="620" y1="75" x2="620" y2="600" stroke="#2B1020" stroke-width="4"/>
+
+        <!-- Tied Back Golden Sheer Curtains -->
+        <path d="M 400,75 Q 430,270 405,480 L 400,480 Z" fill="url(#grad-curtain)"/>
+        <path d="M 685,75 Q 655,270 680,480 L 685,480 Z" fill="url(#grad-curtain)"/>
+        <circle cx="410" cy="350" r="6" fill="#C29B38"/>
+        <line x1="410" y1="350" x2="410" y2="390" stroke="#FFD54F" stroke-width="3"/>
+        <circle cx="675" cy="350" r="6" fill="#C29B38"/>
+        <line x1="675" y1="350" x2="675" y2="390" stroke="#FFD54F" stroke-width="3"/>
+      </g>
+
+      <!-- Outer Gold Foil Arch Frame -->
+      <path d="M 400,600 L 400,240 
+               C 400,195 413,185 437,175 
+               C 450,150 470,140 500,135 
+               C 520,110 542,85 542,75 
+               C 542,85 564,110 584,135 
+               C 614,140 634,150 647,175 
+               C 671,185 685,195 685,240 
+               L 685,600" stroke="url(#grad-gold)" stroke-width="8" fill="none"/>
+      <path d="M 393,600 L 393,240 C 393,165 445,125 542,65 C 639,125 692,165 692,240 L 692,600" stroke="#6E5312" stroke-width="3" fill="none"/>
+
+      <!-- Hanging Ornate Lantern -->
+      <g transform="translate(542, 75)">
+        <line x1="0" y1="0" x2="0" y2="50" stroke="#D4AF37" stroke-width="2"/>
+        <path d="M -16,50 L 16,50 L 22,88 L 0,105 L -22,88 Z" fill="url(#grad-gold)"/>
+        <circle cx="0" cy="75" r="42" fill="url(#grad-flame-glow)"/>
+        <circle cx="0" cy="75" r="10" fill="#FFFFFF"/>
+      </g>
+
+      <!-- Lower Wood Paneling in Her Chamber -->
+      <rect x="385" y="600" width="335" height="680" fill="#220308"/>
+      <rect x="385" y="600" width="335" height="30" fill="#3D0610"/>
+      <line x1="385" y1="630" x2="720" y2="630" stroke="#D4AF37" stroke-width="2"/>
+
+      <!-- 4 Mughal Carved Niches on Her Lower Paneling -->
+      <g id="right-niches" transform="translate(400, 660)">
+        <path d="M 10,160 L 10,40 C 10,10 30,0 40,-10 C 50,0 70,10 70,40 L 70,160 Z" stroke="#631422" stroke-width="2" fill="#120104"/>
+        <path d="M 85,160 L 85,40 C 85,10 105,0 115,-10 C 125,0 145,10 145,40 L 145,160 Z" stroke="#631422" stroke-width="2" fill="#120104"/>
+        <path d="M 160,160 L 160,40 C 160,10 180,0 190,-10 C 200,0 220,10 220,40 L 220,160 Z" stroke="#631422" stroke-width="2" fill="#120104"/>
+        <path d="M 235,160 L 235,40 C 235,10 255,0 265,-10 C 275,0 295,10 295,40 L 295,160 Z" stroke="#631422" stroke-width="2" fill="#120104"/>
+      </g>
+
+      <!-- Anidoodle Anatomical Head & Sleeping Beloved Figure -->
+      <g id="her-bed" transform="translate(515, 515)">
+        <!-- Silk Brocade Quilt -->
+        <path d="M 0,210 L 0,60 C 25,45 65,35 125,40 C 165,45 195,65 205,80 L 205,210 Z" fill="url(#grad-quilt)"/>
+        <line x1="0" y1="60" x2="205" y2="80" stroke="url(#grad-gold)" stroke-width="4"/>
+
+        <!-- Silk Pillow with Gold Piping -->
+        <ellipse cx="65" cy="40" rx="55" ry="25" fill="#E8D7B8" stroke="#D4AF37" stroke-width="1.5"/>
+
+        <!-- Anatomical Head & Features (Loomis Facial Planes) -->
+        <g transform="translate(65, 30)">
+          <!-- Cranium & Jaw Structure -->
+          <path d="M -30,-20 C -25,-48 30,-48 42,-22 C 48,2 35,38 12,42 C -8,45 -32,15 -30,-20 Z" fill="#E8B89E"/>
+          
+          <!-- Glossy Black Hair with Flowing Strands -->
+          <path d="M -36,-15 C -30,-48 24,-52 46,-20 C 50,8 35,42 12,46 C -12,48 -40,22 -36,-15 Z" fill="#141416"/>
+          <path d="M -30,-12 C -24,-38 18,-42 38,-15 C 32,8 10,25 -8,22 C -20,20 -30,6 -30,-12 Z" fill="#E8B89E"/>
+          
+          <!-- Arched Brow & Curved Eyelashes -->
+          <path d="M -16,-6 Q -8,-12 0,-7" stroke="#2B160E" stroke-width="2" fill="none"/>
+          <path d="M -14,-2 Q -7,5 0,-1" stroke="#3D2015" stroke-width="2.5" fill="none"/>
+          <path d="M -10,1 L -12,4 M -6,2 L -6,6 M -2,1 L 0,4" stroke="#3D2015" stroke-width="1.5"/>
+          
+          <!-- Red Bindi & Pearl Maang-Tikka Hint -->
+          <circle cx="4" cy="-15" r="3.2" fill="#D32F2F"/>
+          <circle cx="4" cy="-24" r="2.5" fill="#FFF0A8"/>
+          
+          <!-- Delicate Nose Profile & Lips with Cupids Bow -->
+          <path d="M 0,2 Q 3,8 7,10" stroke="#C28C72" stroke-width="1.8" fill="none"/>
+          <path d="M 2,15 Q 5,19 9,15 Q 5,16 2,15" fill="#C2185B"/>
+          <!-- Gold Jhumka / Earring -->
+          <circle cx="-28" cy="12" r="4" fill="url(#grad-gold)"/>
+          <circle cx="-28" cy="20" r="6" fill="url(#grad-gold)"/>
+        </g>
+
+        <!-- Anidoodle Hand with Henna & Bangles on Quilt -->
+        <g transform="translate(135, 80)">
+          <!-- Bangles Stack -->
+          <rect x="0" y="0" width="8" height="35" rx="2" fill="url(#grad-gold)"/>
+          <rect x="-6" y="2" width="5" height="32" rx="1.5" fill="#E91E63"/>
+          <rect x="-12" y="4" width="5" height="28" rx="1.5" fill="url(#grad-gold)"/>
+          <!-- Slender Hand Silhouette -->
+          <path d="M 0,8 C -15,12 -30,16 -45,22 C -45,28 -30,30 -15,28 C 0,26 10,24 15,22 Z" fill="#E8B89E"/>
+          <!-- Henna Mandala -->
+          <circle cx="-25" cy="20" r="7" fill="#521808" opacity="0.88"/>
+          <circle cx="-25" cy="20" r="4" fill="#E8B89E"/>
+        </g>
+      </g>
+
+      <!-- Fresh Marigold & Jasmine Blossom Garland -->
+      <g id="garland" transform="translate(390, 625)">
+        <circle cx="16" cy="8" r="8" fill="#FF8F00"/>
+        <circle cx="32" cy="12" r="7" fill="#FFF9C4"/>
+        <circle cx="48" cy="14" r="8" fill="#FF6F00"/>
+        <circle cx="64" cy="12" r="7" fill="#FFF9C4"/>
+        <circle cx="80" cy="8" r="8" fill="#FF8F00"/>
+        <circle cx="96" cy="12" r="7" fill="#FFF9C4"/>
+        <circle cx="112" cy="14" r="8" fill="#FF6F00"/>
+        <circle cx="128" cy="12" r="7" fill="#FFF9C4"/>
+      </g>
+
+      <!-- Glowing Animated Diyas -->
+      <g id="right-diya-1" transform="translate(425, 605)">
+        <path d="M -22,18 Q 0,35 22,18 Q 16,5 0,7 Q -16,5 -22,18 Z" fill="url(#grad-gold)"/>
+        <circle id="diya-glow-1" cx="0" cy="-6" r="50" fill="url(#grad-flame-glow)"/>
+        <path id="diya-flame-1" d="M -5,8 Q 0,-20 8,-28 Q 12,-15 5,8 Z" fill="#FFC83B"/>
+        <ellipse cx="2" cy="0" rx="3" ry="8" fill="#FFFFFF"/>
+      </g>
+      <g id="right-diya-2" transform="translate(485, 605)">
+        <path d="M -20,16 Q 0,32 20,16 Q 14,5 0,6 Q -14,5 -20,16 Z" fill="url(#grad-gold)"/>
+        <circle id="diya-glow-2" cx="0" cy="-5" r="45" fill="url(#grad-flame-glow)"/>
+        <path id="diya-flame-2" d="M -4,7 Q 0,-18 7,-25 Q 10,-12 4,7 Z" fill="#FFC83B"/>
+        <ellipse cx="2" cy="0" rx="2.5" ry="7" fill="#FFFFFF"/>
+      </g>
+
+      <!-- Subtitle Card: Her Chamber -->
+      <g id="sub-card-right" transform="translate(410, 870)">
+        <rect x="0" y="0" width="285" height="160" rx="10" fill="rgba(38, 4, 11, 0.94)" stroke="#D4AF37" stroke-width="2"/>
+        <text x="142" y="55" fill="#FFE082" font-size="25" font-weight="700" text-anchor="middle">
+          अपनी महफ़िल
+        </text>
+        <text x="142" y="95" fill="#FFFFFF" font-size="26" font-weight="700" text-anchor="middle">
+          सजाए हुए हैं...
+        </text>
+        <text x="142" y="132" fill="#FFAB91" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="600" text-anchor="middle">
+          [HER MEHFIL // ILLUMINATION]
+        </text>
+      </g>
+    </g>
+
+    <!-- ================= CENTER ORNATE DIVIDER PILLAR ================= -->
+    <g id="center-pillar">
+      <rect x="335" y="0" width="50" height="1280" fill="url(#grad-gold)"/>
+      <rect x="342" y="0" width="36" height="1280" fill="#1C1405"/>
+
+      <g id="pearls-left"></g>
+      <g id="pearls-right"></g>
+      <g id="pillar-stars"></g>
+
+      <!-- Center Belts -->
+      <rect x="330" y="595" width="60" height="12" rx="2" fill="url(#grad-gold)" stroke="#523A05" stroke-width="1.5"/>
+      <rect x="330" y="625" width="60" height="12" rx="2" fill="url(#grad-gold)" stroke="#523A05" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>
+
+<canvas id="paper-canvas" width="720" height="1280"></canvas>
+<canvas id="fx-canvas" width="720" height="1280"></canvas>
+
+<script>
+// =====================================================================
+// 1. Film Specifications & Anidoodle Deterministic Utilities
+// =====================================================================
+const DUR = 16.84;
+const FPS = 30;
+window.DUR = DUR;
+
+function buildPillarDetails() {
+  const pStars = document.getElementById('pillar-stars');
+  const pLeft = document.getElementById('pearls-left');
+  const pRight = document.getElementById('pearls-right');
+
+  // Pearl beads down pillar
+  for (let y = 8; y < 1280; y += 16) {
+    const c1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c1.setAttribute('cx', '338'); c1.setAttribute('cy', y); c1.setAttribute('r', '2.5');
+    c1.setAttribute('fill', '#FFFFFF');
+    pLeft.appendChild(c1);
+
+    const c2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c2.setAttribute('cx', '382'); c2.setAttribute('cy', y); c2.setAttribute('r', '2.5');
+    c2.setAttribute('fill', '#FFFFFF');
+    pRight.appendChild(c2);
+  }
+
+  // 8-Pointed Star inlays
+  for (let y = 24; y < 1280; y += 48) {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('transform', `translate(360, ${y})`);
+    const p1 = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    p1.setAttribute('points', '0,-12 12,0 0,12 -12,0');
+    p1.setAttribute('fill', '#D4AF37');
+    const p2 = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    p2.setAttribute('points', '0,-12 12,0 0,12 -12,0');
+    p2.setAttribute('fill', '#D4AF37');
+    p2.setAttribute('transform', 'rotate(45)');
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('cx', '0'); c.setAttribute('cy', '0'); c.setAttribute('r', '4');
+    c.setAttribute('fill', '#FFFFFF');
+
+    g.appendChild(p1);
+    g.appendChild(p2);
+    g.appendChild(c);
+    pStars.appendChild(g);
+  }
+}
+
+// Generate Realistic Paper Texture (Anidoodle Fiber Grain)
+function initPaperTexture() {
+  const c = document.getElementById('paper-canvas');
+  const pCtx = c.getContext('2d');
+  const imgData = pCtx.createImageData(720, 1280);
+  const data = imgData.data;
+
+  let s = 12345;
+  function rand() {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  }
+
+  for (let i = 0; i < data.length; i += 4) {
+    const noise = Math.floor(rand() * 45);
+    data[i] = 230 - noise;
+    data[i + 1] = 220 - noise;
+    data[i + 2] = 200 - noise;
+    data[i + 3] = 255;
+  }
+  pCtx.putImageData(imgData, 0, 0);
+}
+
+// Particle Engine on FX Canvas (Golden Light Motes)
+const fxCanvas = document.getElementById('fx-canvas');
+const ctx = fxCanvas.getContext('2d');
+
+function pseudoRand(seed) {
+  const x = Math.sin(seed * 9999) * 10000;
+  return x - Math.floor(x);
+}
+
+function drawFX(t) {
+  ctx.clearRect(0, 0, 720, 1280);
+
+  if (t >= 3.0) {
+    const numMotes = 32;
+    for (let i = 0; i < numMotes; i++) {
+      const seed = i + 1;
+      const baseX = 400 + pseudoRand(seed * 11) * 300;
+      const baseY = 160 + pseudoRand(seed * 17) * 750;
+      const speedY = 18 + pseudoRand(seed * 23) * 28;
+      const curY = (baseY - (t - 3.0) * speedY) % 750 + 160;
+      const curX = baseX + Math.sin(t * 2 + seed) * 14;
+      const size = 1.5 + pseudoRand(seed * 31) * 2.2;
+      const alpha = 0.25 + 0.55 * Math.sin(t * 3 + seed * 2);
+
+      ctx.beginPath();
+      ctx.arc(curX, curY, size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 215, 120, ${alpha.toFixed(2)})`;
+      ctx.fill();
+    }
+  }
+}
+
+// =====================================================================
+// 2. Main Render Loop
+// =====================================================================
+function render(t) {
+  t = Math.max(0, Math.min(t, DUR));
+
+  const sPrologue = document.getElementById('scene-prologue');
+  const sDiptych = document.getElementById('scene-diptych');
+
+  if (t < 3.2) {
+    sPrologue.style.display = 'inline';
+    sDiptych.style.display = 'none';
+
+    const pHandMan = document.getElementById('p-hand-man');
+    const pHandWoman = document.getElementById('p-hand-woman');
+    const pUnionGlow = document.getElementById('p-union-glow');
+    const pColdShadow = document.getElementById('p-cold-shadow');
+    const pMotes = document.getElementById('p-motes');
+
+    if (t < 1.6) {
+      // 0.0s - 1.6s: Tender union & breathing hold
+      const breath = Math.sin(t * 2.5) * 3;
+      pHandMan.setAttribute('transform', `translate(${(-breath * 0.5).toFixed(1)}, ${(breath).toFixed(1)})`);
+      pHandWoman.setAttribute('transform', `translate(${(breath * 0.5).toFixed(1)}, ${(breath).toFixed(1)})`);
+
+      const glowPulse = 0.9 + 0.1 * Math.sin(t * 4);
+      pUnionGlow.setAttribute('opacity', glowPulse.toFixed(2));
+      pColdShadow.setAttribute('opacity', '0');
+      sPrologue.setAttribute('opacity', '1');
+    } else if (t < 2.9) {
+      // 1.6s - 2.9s: "Meri mehfil mein karke andhere..." - The Parting!
+      const p = (t - 1.6) / 1.3;
+      const easeW = p * p * (3 - 2 * p); // smoothstep
+      
+      // Woman's hand gently recedes into her world (to the right and down)
+      const wX = easeW * 340;
+      const wY = easeW * 220;
+      const wRot = easeW * 12;
+      pHandWoman.setAttribute('transform', `translate(${wX.toFixed(1)}, ${wY.toFixed(1)}) rotate(${wRot.toFixed(1)} 500 740)`);
+
+      // Man's hand lingers, stretches slightly towards her, then sinks into cold loneliness
+      let mX = 0, mY = 0;
+      if (p < 0.35) {
+        const reach = p / 0.35;
+        mX = reach * 14;
+        mY = -reach * 10;
+      } else {
+        const fall = (p - 0.35) / 0.65;
+        const fallEase = fall * fall;
+        mX = 14 - fallEase * 28;
+        mY = -10 + fallEase * 48;
+      }
+      pHandMan.setAttribute('transform', `translate(${mX.toFixed(1)}, ${mY.toFixed(1)})`);
+
+      // Light fades, darkness engulfs his side
+      const glowFade = Math.max(0, 1 - p * 1.4);
+      pUnionGlow.setAttribute('opacity', glowFade.toFixed(2));
+      pMotes.setAttribute('opacity', glowFade.toFixed(2));
+      
+      // Cold shadow deepens
+      const shadowRise = Math.min(0.85, p * 0.95);
+      pColdShadow.setAttribute('opacity', shadowRise.toFixed(2));
+      sPrologue.setAttribute('opacity', '1');
+    } else {
+      // 2.9s - 3.2s: Seamless crossfade into the Diptych
+      const xfade = (t - 2.9) / 0.3;
+      sPrologue.setAttribute('opacity', Math.max(0, 1 - xfade).toFixed(2));
+      sDiptych.style.display = 'inline';
+      sDiptych.setAttribute('opacity', Math.min(1, xfade).toFixed(2));
+    }
+  } else {
+    sPrologue.style.display = 'none';
+    sDiptych.style.display = 'inline';
+    sDiptych.setAttribute('opacity', '1');
+
+    // Pocket Watch Hands Ticking (as night passes from 11:30 to 4:00)
+    const watchHour = document.getElementById('watch-hour');
+    const watchMin = document.getElementById('watch-min');
+    const tProg = (t - 3.2) / (16.84 - 3.2);
+    const hDeg = 345 + tProg * 135;
+    const mDeg = (tProg * 4.5 * 360) % 360;
+    watchHour.setAttribute('transform', `rotate(${hDeg.toFixed(1)})`);
+    watchMin.setAttribute('transform', `rotate(${mDeg.toFixed(1)})`);
+
+    // Left side smoke
+    const sm1 = document.getElementById('smoke-left-1');
+    const sm2 = document.getElementById('smoke-left-2');
+    const w1 = Math.sin(t * 2.8) * 12;
+    const w2 = Math.cos(t * 3.2) * 10;
+    sm1.setAttribute('d', `M 0,8 Q ${-12 + w1},-35 ${18 - w1},-75 T ${6 + w1},-150 T ${22 - w1},-210`);
+    sm2.setAttribute('d', `M 0,7 Q ${14 - w2},-38 ${-10 + w2},-80 T ${12 - w2},-140`);
+
+    // Left moonlight dimmer
+    const leftDimmer = document.getElementById('left-dimmer');
+    const darkP = Math.min(1, Math.max(0, (t - 5.5) / 2.5));
+    leftDimmer.setAttribute('opacity', (0.35 + darkP * 0.35).toFixed(2));
+
+    // Right side flickering diyas
+    const rFlick1 = 1 + 0.12 * Math.sin(t * 21) + 0.06 * Math.cos(t * 33);
+    const rFlick2 = 1 + 0.10 * Math.sin(t * 27 + 1) + 0.05 * Math.cos(t * 39);
+    const dGlow1 = document.getElementById('diya-glow-1');
+    const dFlame1 = document.getElementById('diya-flame-1');
+    const dGlow2 = document.getElementById('diya-glow-2');
+    const dFlame2 = document.getElementById('diya-flame-2');
+
+    dFlame1.setAttribute('transform', `scale(${rFlick1.toFixed(3)})`);
+    dGlow1.setAttribute('r', (50 * rFlick1).toFixed(1));
+    dFlame2.setAttribute('transform', `scale(${rFlick2.toFixed(3)})`);
+    dGlow2.setAttribute('r', (45 * rFlick2).toFixed(1));
+
+    // Subtitle cards
+    const cardLeft = document.getElementById('sub-card-left');
+    const cardRight = document.getElementById('sub-card-right');
+
+    if (t < 8.8) {
+      const enterL = Math.min(1, (t - 3.2) / 0.4);
+      cardLeft.setAttribute('opacity', enterL.toFixed(2));
+      cardLeft.setAttribute('transform', `translate(25, ${(890 - enterL * 20).toFixed(1)})`);
+      cardRight.setAttribute('opacity', '0.2');
+    } else {
+      cardLeft.setAttribute('opacity', '0.3');
+      const enterR = Math.min(1, (t - 8.8) / 0.4);
+      cardRight.setAttribute('opacity', enterR.toFixed(2));
+      cardRight.setAttribute('transform', `translate(410, ${(890 - enterR * 20).toFixed(1)})`);
+    }
+  }
+
+  drawFX(t);
+}
+
+// =====================================================================
+// 3. TEXTS contract for readcheck.mjs
+// =====================================================================
+window.TEXTS = function(t) {
+  const texts = [];
+
+  if (t < 3.2) {
+    texts.push({
+      id: 'prologue_title',
+      text: 'मेरी महफ़िल',
+      x0: 100, y0: 1000, x1: 620, y1: 1120,
+      pass: true
+    });
+  }
+
+  if (t >= 3.2 && t < 8.8) {
+    texts.push({
+      id: 'sub_his_chamber',
+      text: 'मेरी महफ़िल में करके अँधेरे',
+      x0: 25, y0: 870, x1: 310, y1: 1030
+    });
+  }
+
+  if (t >= 8.8 && t <= 16.84) {
+    texts.push({
+      id: 'sub_her_chamber',
+      text: 'अपनी महफ़िल सजाए हुए हैं',
+      x0: 410, y0: 870, x1: 695, y1: 1030
+    });
+  }
+
+  return texts;
+};
+
+// =====================================================================
+// 4. Initialization
+// =====================================================================
+async function init() {
+  buildPillarDetails();
+  initPaperTexture();
+
+  const fams = [
+    '700 30px "Noto Serif Devanagari"',
+    '400 30px "Noto Serif Devanagari"',
+    '700 20px "JetBrains Mono"'
+  ];
+  const sample = 'मेरीमहफ़िलमेंकरकेअँधेरेसजाएहुएहैंABCDEFGHIJKLMNOPQRSTUVWXYZ//:[]';
+  await Promise.all(fams.map(f => document.fonts.load(f, sample)));
+  await document.fonts.ready;
+
+  const q = new URLSearchParams(location.search);
+  render(parseFloat(q.get('t') || '0'));
+  window.READY = true;
+}
+
+window.render = render;
+init();
+</script>
+</body>
+</html>

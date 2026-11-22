@@ -1,0 +1,11 @@
+{
+  "title": "Meri Mehfil",
+  "duration": 16.84,
+  "fps": 30,
+  "resolution": [720, 1280],
+  "cues": [
+    { "t0": 0.0, "t1": 3.2, "scene": "prologue", "action": "Extinguishing the Diya" },
+    { "t0": 3.2, "t1": 8.8, "scene": "his_mehfil", "action": "Darkness in His Chamber" },
+    { "t0": 8.8, "t1": 16.84, "scene": "her_mehfil", "action": "Radiance in Her Chamber" }
+  ]
+}

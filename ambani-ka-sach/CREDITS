@@ -1,0 +1,18 @@
+CREDITS — अंबानी का सच (ambani-ka-sach)
+
+Picture, Score & Foley
+- 100% procedural Canvas 2D + SVG rendering, procedural synthesis score, and procedural foley (MIT-compatible project code).
+
+Typography (Google Fonts — SIL Open Font License 1.1)
+- Noto Serif Devanagari (Weights 700, 900) — https://fonts.google.com/specimen/Noto+Serif+Devanagari
+- Noto Sans Devanagari (Weights 600, 800, 900) — https://fonts.google.com/specimen/Noto+Sans+Devanagari
+- Bagel Fat One (Weight 400) — https://fonts.google.com/specimen/Bagel+Fat+One
+- Archivo Black (Weight 400) — https://fonts.google.com/specimen/Archivo+Black
+- JetBrains Mono (Weights 500, 800) — https://fonts.google.com/specimen/JetBrains+Mono
+
+Voice Narration
+- Microsoft Edge TTS (`hi-IN-MadhurNeural`) via `edge-tts` — online Microsoft neural speech service. Subject to Microsoft's terms of use; do not redistribute the raw voice track independently.
+
+Factual Sources
+- See `FACTS.md` for verified historical and business milestone references (Reliance Industries official history, Britannica, Wikipedia, Economic Times).
+
