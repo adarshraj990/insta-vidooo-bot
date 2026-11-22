@@ -1,0 +1,52 @@
+{
+  "title": "Hum Tadapte Rahenge Yahan Raat Bhar",
+  "totalDuration": 20.01,
+  "fps": 30,
+  "totalFrames": 600,
+  "acts": [
+    {
+      "id": 1,
+      "name": "The Plea at Twilight",
+      "start": 0.0,
+      "end": 5.5,
+      "lyrics": "मत जाओ ना बेचैन करके मुझे, जाने-जाँ दिल दुखाना बुरी बात है...",
+      "transliteration": "Mat jao na bechain karke mujhe, jaane-jaan dil dukhana buri baat hai...",
+      "scene": "scene1.jpg",
+      "motion": "pan-up-right",
+      "fx": "golden-embers"
+    },
+    {
+      "id": 2,
+      "name": "Sleepless Longing",
+      "start": 5.5,
+      "end": 10.5,
+      "lyrics": "हम तड़पते रहेंगे यहाँ रात भर...",
+      "transliteration": "Hum tadapte rahenge yahan raat bhar...",
+      "scene": "scene2.jpg",
+      "motion": "zoom-in",
+      "fx": "starlight-motes"
+    },
+    {
+      "id": 3,
+      "name": "Serene Slumber of the Beloved",
+      "start": 10.5,
+      "end": 15.5,
+      "lyrics": "तुम तो आराम की नींद सो जाओगे...",
+      "transliteration": "Tum to aaram ki neend so jaoge...",
+      "scene": "scene3.jpg",
+      "motion": "pan-down",
+      "fx": "amber-glow"
+    },
+    {
+      "id": 4,
+      "name": "Rain & Solitude",
+      "start": 15.5,
+      "end": 20.01,
+      "lyrics": "हम तड़पते रहेंगे यहाँ रात भर...",
+      "transliteration": "Hum tadapte rahenge yahan raat bhar...",
+      "scene": "scene4.jpg",
+      "motion": "slow-zoom-in",
+      "fx": "rain-and-petals"
+    }
+  ]
+}
