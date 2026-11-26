@@ -2,66 +2,87 @@ import os
 import json
 import ssl
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timezone
 
 BUFFER_TOKEN = os.environ.get("BUFFER_TOKEN", "VeuPLEC4vfP2JzaQw-cFpa_MTrTLTcA6yplvwnNXhd6")
-CHANNEL_ID = os.environ.get("CHANNEL_ID", "6b027e358541f09ecb5f093b")
+REGISTRY_PATH = os.path.join(os.path.dirname(__file__), "scheduled_posts.json")
 
 ctx = ssl.create_default_context()
 
-query = """
-query GetChannelPosts($channelId: RecordID!) {
-  channel(id: $channelId) {
+q = """
+query GetPostDetails($input: PostInput!) {
+  post(input: $input) {
     id
-    serviceId
-    posts(input: { filter: { status: scheduled } }) {
-      totalCount
-      edges {
-        node {
-          id
-          status
-          dueAt
-          text
-        }
-      }
+    status
+    dueAt
+    sentAt
+    text
+    error {
+      message
     }
   }
 }
 """
 
-req = urllib.request.Request(
-    "https://api.buffer.com",
-    data=json.dumps({"query": query, "variables": {"channelId": CHANNEL_ID}}).encode('utf-8'),
-    headers={
-        "Authorization": f"Bearer {BUFFER_TOKEN}",
-        "Content-Type": "application/json"
-    }
-)
+if not os.path.exists(REGISTRY_PATH):
+    print("No scheduled_posts.json registry found.")
+    exit(0)
 
-try:
-    with urllib.request.urlopen(req, context=ctx) as r:
-        data = json.loads(r.read().decode('utf-8'))
-        channel = data.get('data', {}).get('channel', {})
-        posts_info = channel.get('posts', {})
-        total_scheduled = posts_info.get('totalCount', 0)
-        edges = posts_info.get('edges', [])
+with open(REGISTRY_PATH, "r", encoding="utf-8") as f:
+    posts = json.load(f)
 
-        print(f"=== BUFFER CLOUD AUTOPILOT MONITOR ===")
-        print(f"Timestamp: {datetime.utcnow().isoformat()} UTC")
-        print(f"Active Scheduled Posts in Cloud Queue: {total_scheduled}")
-        print("-" * 50)
+print("=" * 60)
+print("=== BUFFER CLOUD AUTOPILOT WATCHDOG (UNATTENDED RUNNER) ===")
+print(f"Current UTC Time: {datetime.now(timezone.utc).isoformat()}")
+print(f"Tracking {len(posts)} total scheduled/live posts...")
+print("=" * 60)
 
-        for edge in edges:
-            node = edge['node']
-            due_at = node.get('dueAt')
-            first_line = node.get('text', '').split('\n')[0]
-            print(f"[LIVE IN BUFFER CLOUD] {due_at} -> {first_line}")
+active_scheduled_count = 0
+published_count = 0
 
-        if total_scheduled >= 4:
-            print("\n[OK] Queue is healthy! Posts are queued in Buffer Cloud.")
-        else:
-            print(f"\n[ALERT] Queue has only {total_scheduled} posts remaining. Advance scheduling needed.")
+for item in posts:
+    pid = item["id"]
+    slot = item.get("slot", "")
+    song = item.get("song", "")
+    
+    req = urllib.request.Request(
+        "https://api.buffer.com",
+        data=json.dumps({"query": q, "variables": {"input": {"id": pid}}}).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {BUFFER_TOKEN}",
+            "Content-Type": "application/json",
+            "User-Agent": "AntigravityBufferWatchdog/1.0"
+        }
+    )
+    
+    try:
+        with urllib.request.urlopen(req, context=ctx) as r:
+            res = json.loads(r.read().decode("utf-8"))
+            post_data = res.get("data", {}).get("post")
+            if not post_data:
+                print(f"[MISSING/REMOVED] ID {pid} ({song} - {slot})")
+                continue
+            
+            status = post_data.get("status")
+            due_at = post_data.get("dueAt")
+            sent_at = post_data.get("sentAt")
+            err = post_data.get("error")
+            
+            if status == "scheduled":
+                active_scheduled_count += 1
+                print(f"[LOCKED IN CLOUD] {slot} | {song} | Due: {due_at} | Status: {status}")
+            elif status == "sent":
+                published_count += 1
+                print(f"[SUCCESS PUBLISHED] {slot} | {song} | Sent: {sent_at}")
+            else:
+                print(f"[{status.upper()}] {slot} | {song} | Due: {due_at} | Err: {err}")
+    except Exception as e:
+        print(f"[ERROR CHECKING] {song} ({pid}): {e}")
 
-except Exception as e:
-    print(f"Error querying Buffer API: {e}")
-    exit(1)
+print("-" * 60)
+print(f"Summary: {active_scheduled_count} pending in cloud queue, {published_count} successfully published.")
+if active_scheduled_count > 0:
+    print("[CLOUD HEALTH OK] Buffer will automatically push these to Instagram without PC or user interaction!")
+else:
+    print("[ATTENTION] All queued posts have been published. Next batch must be scheduled.")
+print("=" * 60)

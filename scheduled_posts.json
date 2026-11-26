@@ -1,0 +1,42 @@
+[
+  {
+    "id": "6b0871079068b6e0794ffda8",
+    "song": "Pehla Nasha",
+    "slot": "Friday 09:00 AM IST",
+    "dueAt": "2026-11-27T03:30:00.000Z",
+    "release": "v1.4.0",
+    "mediaUrl": "https://github.com/adarshraj990/insta-vidooo-bot/releases/download/v1.4.0/pehla-nasha.mp4"
+  },
+  {
+    "id": "6b086591d3b9c1cd667c7ac6",
+    "song": "Tum Se Hi",
+    "slot": "Friday 12:00 PM IST",
+    "dueAt": "2026-11-27T06:30:00.000Z",
+    "release": "v1.2.0",
+    "mediaUrl": "https://github.com/adarshraj990/insta-vidooo-bot/releases/download/v1.2.0/tum-se-hi.mp4"
+  },
+  {
+    "id": "6b0871493accdac92ce8caaf",
+    "song": "Zara Zara",
+    "slot": "Friday 05:30 PM IST",
+    "dueAt": "2026-11-27T12:00:00.000Z",
+    "release": "v1.5.0",
+    "mediaUrl": "https://github.com/adarshraj990/insta-vidooo-bot/releases/download/v1.5.0/zara-zara.mp4"
+  },
+  {
+    "id": "6b08718f9068b6e079503404",
+    "song": "Kesariya",
+    "slot": "Friday 09:30 PM IST",
+    "dueAt": "2026-11-27T16:00:00.000Z",
+    "release": "v1.6.0",
+    "mediaUrl": "https://github.com/adarshraj990/insta-vidooo-bot/releases/download/v1.6.0/kesariya.mp4"
+  },
+  {
+    "id": "6b0868999068b6e0794c5079",
+    "song": "Iktara",
+    "slot": "Saturday 12:00 PM IST",
+    "dueAt": "2026-11-28T06:30:00.000Z",
+    "release": "v1.3.0",
+    "mediaUrl": "https://github.com/adarshraj990/insta-vidooo-bot/releases/download/v1.3.0/iktara.mp4"
+  }
+]
