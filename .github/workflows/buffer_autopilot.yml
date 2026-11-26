@@ -1,0 +1,30 @@
+name: Buffer Autopilot Cloud Monitor
+
+on:
+  schedule:
+    # Runs every 6 hours UTC
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-and-maintain-queue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Run Cloud Autopilot Monitor
+        env:
+          BUFFER_TOKEN: ${{ secrets.BUFFER_TOKEN || 'VeuPLEC4vfP2JzaQw-cFpa_MTrTLTcA6yplvwnNXhd6' }}
+          CHANNEL_ID: "6b027e358541f09ecb5f093b"
+        run: |
+          python cloud_autopilot.py
